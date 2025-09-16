@@ -5,19 +5,19 @@ import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
 import 'package:social_network/core/utils/use_case.dart';
 import 'package:social_network/features/post/domain/entities/post.dart';
-import 'package:social_network/features/post/domain/repository/post_repo.dart';
+import 'package:social_network/features/post/domain/repository/post_creation_repo.dart';
 import 'package:social_network/features/session/domain/repository/session_repo.dart';
 
 @injectable
 class CreatePostUseCase
     extends UseCaseWithParam<FutureResult<void>, CreatePostUseCaseParam> {
   const CreatePostUseCase({
-    required PostRepo postRepo,
+    required PostCreationRepo postCreationRepo,
     required SessionRepo sessionRepo,
-  }) : _postRepo = postRepo,
+  }) : _postCreationRepo = postCreationRepo,
        _sessionRepo = sessionRepo;
 
-  final PostRepo _postRepo;
+  final PostCreationRepo _postCreationRepo;
   final SessionRepo _sessionRepo;
 
   @override
@@ -31,8 +31,7 @@ class CreatePostUseCase
       content: param.content,
       createdAt: timeStamp,
     );
-    var result = await _postRepo.createPost(post, param.media);
-    print(result.fold((s)=>s, (f)=>f.message));
+    var result = await _postCreationRepo.createPost(post, param.media);
     return result;
   }
 }

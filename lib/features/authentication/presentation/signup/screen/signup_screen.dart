@@ -5,10 +5,9 @@ import 'package:social_network/core/constants/app_size.dart';
 import 'package:social_network/core/widget/loading_dialog.dart';
 import 'package:social_network/features/authentication/presentation/signup/bloc/signup_cubit.dart';
 import 'package:social_network/features/authentication/presentation/signup/bloc/signup_state.dart';
-import 'package:social_network/features/authentication/presentation/signup/widget/signup_email_screen.dart';
 import 'package:social_network/features/authentication/presentation/signup/widget/signup_create_user_screen.dart';
+import 'package:social_network/features/authentication/presentation/signup/widget/signup_email_screen.dart';
 import 'package:social_network/features/authentication/presentation/signup/widget/signup_password_screen.dart';
-import 'package:social_network/features/user/presentation/profile_onboarding/widgets/show_profile_pic_screen.dart';
 import 'package:social_network/features/authentication/presentation/signup/widget/signup_user_name.dart';
 import 'package:social_network/route/app_router.dart';
 
@@ -59,7 +58,6 @@ class SignUpScreen extends StatelessWidget {
                         SignUpUserName() => SignUpUserNameScreen(),
                         SignUpCreateUser() => SignUpCreateUserScreen(),
                       };
-                      print("-$state == $screen-");
                       return screen;
                     },
                   ),

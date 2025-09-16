@@ -13,8 +13,8 @@ import 'package:social_network/features/authentication/presentation/signup/bloc/
 import 'package:social_network/features/authentication/presentation/signup/screen/signup_screen.dart';
 import 'package:social_network/features/home/home_screen.dart';
 import 'package:social_network/features/main/presentation/main_screen.dart';
-import 'package:social_network/features/post/presntation/bloc/create_post/create_post_cubit.dart';
-import 'package:social_network/features/post/presntation/screen/create_post_screen.dart';
+import 'package:social_network/features/post/presentation/create_post/bloc/create_post_cubit.dart';
+import 'package:social_network/features/post/presentation/create_post/screen/create_post_screen.dart';
 import 'package:social_network/features/splash/presentation/screen/splash_screen.dart';
 import 'package:social_network/features/user/domain/entities/user.dart';
 import 'package:social_network/features/user/presentation/profile_onboarding/bloc/profile_onboarding_cubit.dart';
@@ -74,7 +74,6 @@ class AppRouter {
           child: LogInScreen(),
         ),
       ),
-
 
       /// Profile onboarding
       GoRoute(

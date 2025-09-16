@@ -27,7 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
       await _getUserUseCase();
       emit(Authenticated());
     } else {
-      final accounts = await _getAccountsUseCase();
+      final accounts = _getAccountsUseCase();
       var newState = accounts.fold<AuthState>(
         (s) => s.isNotEmpty ? ShowAccountPicker(s) : Unauthenticated(),
         (f) => Unauthenticated(),

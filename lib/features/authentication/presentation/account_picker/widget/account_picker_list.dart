@@ -32,7 +32,6 @@ class AccountPickerList extends StatelessWidget {
   }
 
   bool _buildWhen(AccountPickerState prev, AccountPickerState curr) {
-    return (prev.list.length != curr.list.length) &&
-        curr is! AccountPickerLoading;
+    return prev is! AccountPickerInitial && curr is AccountPickerInitial;
   }
 }

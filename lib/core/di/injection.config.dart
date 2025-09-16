@@ -48,18 +48,46 @@ import 'package:social_network/features/authentication/presentation/login/bloc/l
     as _i1018;
 import 'package:social_network/features/authentication/presentation/signup/bloc/signup_cubit.dart'
     as _i834;
-import 'package:social_network/features/post/data/data_source/post_remote_data_source.dart'
-    as _i1;
-import 'package:social_network/features/post/data/repository/post_repo_impl.dart'
-    as _i1044;
-import 'package:social_network/features/post/domain/repository/post_repo.dart'
-    as _i242;
-import 'package:social_network/features/post/domain/usecase/create_post_usecase.dart'
-    as _i435;
-import 'package:social_network/features/post/domain/usecase/get_user_posts_usecase.dart'
-    as _i678;
-import 'package:social_network/features/post/presntation/bloc/create_post/create_post_cubit.dart'
-    as _i865;
+import 'package:social_network/features/post/data/data_source/post_action_remote_data_source.dart'
+    as _i1033;
+import 'package:social_network/features/post/data/data_source/post_collection_remote_data_source.dart'
+    as _i543;
+import 'package:social_network/features/post/data/data_source/post_creation_remote_data_source.dart'
+    as _i247;
+import 'package:social_network/features/post/data/data_source/post_query_remote_data_source.dart'
+    as _i12;
+import 'package:social_network/features/post/data/repository/post_action_repo_impl.dart'
+    as _i112;
+import 'package:social_network/features/post/data/repository/post_collection_repo_impl.dart'
+    as _i926;
+import 'package:social_network/features/post/data/repository/post_creation_repo_impl.dart'
+    as _i549;
+import 'package:social_network/features/post/data/repository/post_query_repo_impl.dart'
+    as _i709;
+import 'package:social_network/features/post/domain/repository/post_action_repo.dart'
+    as _i190;
+import 'package:social_network/features/post/domain/repository/post_collection_repo.dart'
+    as _i667;
+import 'package:social_network/features/post/domain/repository/post_creation_repo.dart'
+    as _i818;
+import 'package:social_network/features/post/domain/repository/post_query_repo.dart'
+    as _i372;
+import 'package:social_network/features/post/domain/usecase/create_post/create_post_usecase.dart'
+    as _i522;
+import 'package:social_network/features/post/domain/usecase/post_action/dislike_post_usecase.dart'
+    as _i679;
+import 'package:social_network/features/post/domain/usecase/post_action/like_post_usecase.dart'
+    as _i243;
+import 'package:social_network/features/post/domain/usecase/post_collection/get_feed_posts_usecase.dart'
+    as _i94;
+import 'package:social_network/features/post/domain/usecase/post_query/get_post_detail_usecase.dart'
+    as _i234;
+import 'package:social_network/features/post/presentation/create_post/bloc/create_post_cubit.dart'
+    as _i951;
+import 'package:social_network/features/post/presentation/feed_post/bloc/feed_post_cubit.dart'
+    as _i121;
+import 'package:social_network/features/post/presentation/post/bloc/post_cubit.dart'
+    as _i159;
 import 'package:social_network/features/session/data/data_source/session_local_data_source.dart'
     as _i187;
 import 'package:social_network/features/session/data/repository/session_repo_impl.dart'
@@ -76,12 +104,16 @@ import 'package:social_network/features/user/data/data_source/user_remote_data_s
     as _i457;
 import 'package:social_network/features/user/data/repository/account_picker_repo_impl.dart'
     as _i12;
+import 'package:social_network/features/user/data/repository/user_query_repo_impl.dart'
+    as _i1012;
 import 'package:social_network/features/user/data/repository/user_repo_impl.dart'
     as _i478;
 import 'package:social_network/features/user/domain/entities/user.dart'
     as _i531;
 import 'package:social_network/features/user/domain/repository/account_picker_repo.dart'
     as _i17;
+import 'package:social_network/features/user/domain/repository/user_query_repo.dart'
+    as _i736;
 import 'package:social_network/features/user/domain/repository/user_repo.dart'
     as _i33;
 import 'package:social_network/features/user/domain/usecase/get_accounts_usecase.dart'
@@ -116,24 +148,48 @@ extension GetItInjectableX on _i174.GetIt {
       () => flutterSecureStorageModule.flutterSecureStorage,
     );
     gh.lazySingleton<_i454.SupabaseClient>(() => supabaseModule.supabase);
+    gh.lazySingleton<_i247.PostCreationRemoteDataSource>(
+      () => _i247.PostCreationRemoteDataSourceImpl(
+        fireStore: gh<_i974.FirebaseFirestore>(),
+      ),
+    );
+    gh.lazySingleton<_i1033.PostActionRemoteDataSource>(
+      () => _i1033.PostActionRemoteDataSourceImpl(
+        fireStore: gh<_i974.FirebaseFirestore>(),
+      ),
+    );
     await gh.factoryAsync<_i979.Box<dynamic>>(
       () => hiveModule.userCacheBox,
       instanceName: 'User_box',
       preResolve: true,
+    );
+    gh.lazySingleton<_i543.PostCollectionRemoteDataSource>(
+      () => _i543.PostCollectionRemoteDataSourceImpl(
+        fireStore: gh<_i974.FirebaseFirestore>(),
+      ),
+    );
+    gh.lazySingleton<_i667.PostCollectionRepo>(
+      () => const _i926.PostCollectionRepoImpl(),
     );
     await gh.factoryAsync<_i979.Box<dynamic>>(
       () => hiveModule.accountListBox,
       instanceName: 'account_list_box',
       preResolve: true,
     );
-    gh.lazySingleton<_i1.PostRemoteDataSource>(
-      () => _i1.PostRemoteDataSourceImpl(
+    gh.lazySingleton<_i12.PostQueryRemoteDataSource>(
+      () => _i12.PostQueryRemoteDataSourceImpl(
         fireStore: gh<_i974.FirebaseFirestore>(),
       ),
     );
     gh.lazySingleton<_i457.UserRemoteDataSource>(
       () => _i457.UserRemoteDataSourceImpl(
         fireStore: gh<_i974.FirebaseFirestore>(),
+      ),
+    );
+    gh.factory<_i736.UserQueryRepo>(
+      () => _i1012.UserQueryRepoImpl(
+        connectivity: gh<_i895.Connectivity>(),
+        userRemoteDataSource: gh<_i457.UserRemoteDataSource>(),
       ),
     );
     gh.lazySingleton<_i240.UserLocalDataSource>(
@@ -161,18 +217,27 @@ extension GetItInjectableX on _i174.GetIt {
         secureStorage: gh<_i558.FlutterSecureStorage>(),
       ),
     );
-    gh.lazySingleton<_i242.PostRepo>(
-      () => _i1044.PostRepoImpl(
-        postRemoteDataSource: gh<_i1.PostRemoteDataSource>(),
+    gh.lazySingleton<_i818.PostCreationRepo>(
+      () => _i549.PostCreationRepoImpl(
+        postCreationRemoteDataSource: gh<_i247.PostCreationRemoteDataSource>(),
         supabaseMediaDataSource: gh<_i478.SupabaseMediaDataSource>(),
       ),
     );
-    gh.factory<_i678.GetUserPostsUseCase>(
-      () => _i678.GetUserPostsUseCase(postRepo: gh<_i242.PostRepo>()),
+    gh.lazySingleton<_i372.PostQueryRepo>(
+      () => _i709.PostQueryRepoImpl(
+        connectivity: gh<_i895.Connectivity>(),
+        postQueryRemoteDataSource: gh<_i12.PostQueryRemoteDataSource>(),
+      ),
     );
     gh.lazySingleton<_i17.AccountPickerRepo>(
       () => _i12.AccountPickerRepoImpl(
         accountPickerLocalDataSource: gh<_i663.AccountPickerLocalDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i190.PostActionRepo>(
+      () => _i112.PostActionRepoImpl(
+        connectivity: gh<_i895.Connectivity>(),
+        postActionRemoteDataSource: gh<_i1033.PostActionRemoteDataSource>(),
       ),
     );
     gh.lazySingleton<_i228.AuthRepo>(
@@ -192,6 +257,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i573.SessionRepo>(
       () => _i675.SessionRepoImpl(
         sessionLocalDataSource: gh<_i187.SessionLocalDataSource>(),
+      ),
+    );
+    gh.factory<_i679.DislikePostUseCase>(
+      () => _i679.DislikePostUseCase(
+        postActionRepo: gh<_i190.PostActionRepo>(),
+        sessionRepo: gh<_i573.SessionRepo>(),
+      ),
+    );
+    gh.factory<_i243.LikePostUseCase>(
+      () => _i243.LikePostUseCase(
+        postActionRepo: gh<_i190.PostActionRepo>(),
+        sessionRepo: gh<_i573.SessionRepo>(),
       ),
     );
     gh.factory<_i650.GetAccountsUseCase>(
@@ -256,6 +333,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1018.LogInCubit>(
       () => _i1018.LogInCubit(logInUseCase: gh<_i905.LogInUseCase>()),
     );
+    gh.factory<_i522.CreatePostUseCase>(
+      () => _i522.CreatePostUseCase(
+        postCreationRepo: gh<_i818.PostCreationRepo>(),
+        sessionRepo: gh<_i573.SessionRepo>(),
+      ),
+    );
     gh.factory<_i810.AuthCubit>(
       () => _i810.AuthCubit(
         checkSessionUseCase: gh<_i214.CheckSessionUseCase>(),
@@ -263,10 +346,22 @@ extension GetItInjectableX on _i174.GetIt {
         getUserUseCase: gh<_i252.GetUserUseCase>(),
       ),
     );
-    gh.factory<_i435.CreatePostUseCase>(
-      () => _i435.CreatePostUseCase(
-        postRepo: gh<_i242.PostRepo>(),
+    gh.factory<_i94.GetFeedPostUseCase>(
+      () => _i94.GetFeedPostUseCase(
+        postCollectionRepo: gh<_i667.PostCollectionRepo>(),
         sessionRepo: gh<_i573.SessionRepo>(),
+      ),
+    );
+    gh.factory<_i951.CreatePostCubit>(
+      () => _i951.CreatePostCubit(
+        createPostUseCase: gh<_i522.CreatePostUseCase>(),
+      ),
+    );
+    gh.factory<_i234.GetPostDetailsUseCase>(
+      () => _i234.GetPostDetailsUseCase(
+        postQueryRepo: gh<_i372.PostQueryRepo>(),
+        sessionRepo: gh<_i573.SessionRepo>(),
+        userQueryRepo: gh<_i736.UserQueryRepo>(),
       ),
     );
     gh.factory<_i278.ProfileOnBoardingCubit>(
@@ -275,9 +370,16 @@ extension GetItInjectableX on _i174.GetIt {
         getUserUseCase: gh<_i252.GetUserUseCase>(),
       ),
     );
-    gh.factory<_i865.CreatePostCubit>(
-      () => _i865.CreatePostCubit(
-        createPostUseCase: gh<_i435.CreatePostUseCase>(),
+    gh.factory<_i121.FeedPostCubit>(
+      () => _i121.FeedPostCubit(
+        getFeedPostUseCase: gh<_i94.GetFeedPostUseCase>(),
+      ),
+    );
+    gh.factory<_i159.PostCubit>(
+      () => _i159.PostCubit(
+        postDetailsUseCase: gh<_i234.GetPostDetailsUseCase>(),
+        likePostUseCase: gh<_i243.LikePostUseCase>(),
+        dislikePostUseCase: gh<_i679.DislikePostUseCase>(),
       ),
     );
     return this;

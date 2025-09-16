@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_network/features/post/presentation/feed_post/widget/feed_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -7,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Home")),
-      body: Container(color: Colors.grey),
+      body: FeedList(),
     );
   }
 }

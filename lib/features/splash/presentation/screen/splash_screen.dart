@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:social_network/core/di/injection.dart';
-import 'package:social_network/core/utils/result.dart';
-import 'package:social_network/features/session/domain/usecase/check_session_usecase.dart';
 import 'package:social_network/route/app_router.dart';
 import 'package:social_network/route/app_routes.dart';
 

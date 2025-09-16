@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_network/features/post/presntation/bloc/create_post/create_post_cubit.dart';
-import 'package:social_network/features/post/presntation/bloc/create_post/create_post_state.dart';
+import 'package:social_network/features/post/presentation/create_post/bloc/create_post_cubit.dart';
+import 'package:social_network/features/post/presentation/create_post/bloc/create_post_state.dart';
 
 class EditPostScreen extends StatelessWidget {
   const EditPostScreen(this.state, {super.key});

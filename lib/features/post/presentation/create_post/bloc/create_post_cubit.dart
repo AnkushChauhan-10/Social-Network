@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:social_network/features/post/domain/usecase/create_post_usecase.dart';
-import 'package:social_network/features/post/presntation/bloc/create_post/create_post_state.dart';
+import 'package:social_network/features/post/domain/usecase/create_post/create_post_usecase.dart';
+import 'package:social_network/features/post/presentation/create_post/bloc/create_post_state.dart';
 
 @injectable
 class CreatePostCubit extends Cubit<CreatePostState> {

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/core/cubit/media_picker/media_picker_cubit.dart';
 import 'package:social_network/core/cubit/media_picker/media_picker_state.dart';
-import 'package:social_network/features/post/presntation/bloc/create_post/create_post_cubit.dart';
-import 'package:social_network/features/post/presntation/bloc/create_post/create_post_state.dart';
-import 'package:social_network/features/post/presntation/screen/edit_post_screen.dart';
-import 'package:social_network/features/post/presntation/screen/uploading_post_screen.dart';
+import 'package:social_network/features/post/presentation/create_post/bloc/create_post_cubit.dart';
+import 'package:social_network/features/post/presentation/create_post/bloc/create_post_state.dart';
+import 'package:social_network/features/post/presentation/create_post/screen/edit_post_screen.dart';
+import 'package:social_network/features/post/presentation/create_post/screen/uploading_post_screen.dart';
 
 class CreatePostScreen extends StatelessWidget {
   const CreatePostScreen({super.key});
@@ -21,7 +21,6 @@ class CreatePostScreen extends StatelessWidget {
             context.read<CreatePostCubit>().selectPost(state.file);
             break;
           case MediaPickerError():
-            print(state.message);
             break;
           case MediaPickerLoading():
         }

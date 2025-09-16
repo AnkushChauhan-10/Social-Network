@@ -23,7 +23,8 @@ class AccountPickerCubit extends Cubit<AccountPickerState> {
     var result = await _removeUserUseCase(user);
     var newState = result.fold<AccountPickerState>(
       (s) {
-        List<User> newList = state.list..remove(user);
+        List<User> newList = state.list;
+        newList.remove(user);
         if (newList.isNotEmpty) return AccountPickerInitial(newList);
         return AccountPickerEmpty("");
       },

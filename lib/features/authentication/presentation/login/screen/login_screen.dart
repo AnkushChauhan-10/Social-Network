@@ -20,32 +20,46 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  late final GlobalKey<FormState> _formKey;
+
+  late final TextEditingController _emailController;
+
+  late final TextEditingController _passwordController;
+
+  late final TapGestureRecognizer _signUpRecognizer;
+
   late final LogInCubit _logInCubit;
 
   @override
   void initState() {
     super.initState();
     _logInCubit = context.read<LogInCubit>();
+    _formKey = GlobalKey<FormState>();
+    _passwordController = TextEditingController();
+    _emailController = TextEditingController();
+    _signUpRecognizer = TapGestureRecognizer()
+      ..onTap = () {
+        AppRouter.push(AppRoutes.signUp);
+      };
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _signUpRecognizer.dispose();
     super.dispose();
   }
 
   void _listener(BuildContext context, LogInState state) {
     if (state is LogInSuccessState) AppRouter.go(AppRoutes.auth);
-    if (state is LogInLoadingState) {
-      TransparentLoadingDialog.show(context);
-    } else {
-      TransparentLoadingDialog.hide(context);
-    }
-    print(state);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (state is LogInLoadingState) {
+        TransparentLoadingDialog.show(context);
+      } else {
+        TransparentLoadingDialog.hide(context);
+      }
+    });
   }
 
   void _submit() async {
@@ -120,10 +134,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         TextSpan(
                           text: "Sign Up",
                           style: Theme.of(context).textTheme.labelLarge,
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              AppRouter.push(AppRoutes.signUp);
-                            },
+                          recognizer: _signUpRecognizer,
                         ),
                       ],
                     ),
