@@ -3,8 +3,8 @@ import 'package:social_network/core/error/exceptions.dart';
 import 'package:social_network/core/error/failure.dart';
 import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
-import 'package:social_network/features/session/data/data_source/session_local_data_source.dart';
-import 'package:social_network/features/session/domain/repository/session_repo.dart';
+import 'package:social_network/shared/session/data/data_source/session_local_data_source.dart';
+import 'package:social_network/shared/session/domain/repository/session_repo.dart';
 
 @LazySingleton(as: SessionRepo)
 class SessionRepoImpl extends SessionRepo {

@@ -3,7 +3,7 @@ import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
 import 'package:social_network/core/utils/use_case.dart';
 import 'package:social_network/features/authentication/domain/repository/auth_repo.dart';
-import 'package:social_network/features/session/domain/repository/session_repo.dart';
+import 'package:social_network/shared/session/domain/repository/session_repo.dart';
 
 @injectable
 class LogInUseCase extends UseCaseWithParam<FutureResult<String>, LogInParam> {

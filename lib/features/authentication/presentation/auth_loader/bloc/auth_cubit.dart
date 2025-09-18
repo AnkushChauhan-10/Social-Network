@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:social_network/features/authentication/presentation/auth_loader/bloc/auth_state.dart';
-import 'package:social_network/features/session/domain/usecase/check_session_usecase.dart';
 import 'package:social_network/features/user/domain/usecase/get_accounts_usecase.dart';
 import 'package:social_network/features/user/domain/usecase/get_user_usecase.dart';
+import 'package:social_network/shared/session/domain/usecase/check_session_usecase.dart';
 
 @injectable
 class AuthCubit extends Cubit<AuthState> {

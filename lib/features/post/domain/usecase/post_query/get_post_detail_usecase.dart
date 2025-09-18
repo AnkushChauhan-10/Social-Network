@@ -4,8 +4,8 @@ import 'package:social_network/core/utils/typedef.dart';
 import 'package:social_network/core/utils/use_case.dart';
 import 'package:social_network/features/post/domain/entities/post_detail.dart';
 import 'package:social_network/features/post/domain/repository/post_query_repo.dart';
-import 'package:social_network/features/session/domain/repository/session_repo.dart';
 import 'package:social_network/features/user/domain/repository/user_query_repo.dart';
+import 'package:social_network/shared/session/domain/repository/session_repo.dart';
 
 @injectable
 class GetPostDetailsUseCase

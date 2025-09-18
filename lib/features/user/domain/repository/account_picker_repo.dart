@@ -9,6 +9,8 @@ abstract class AccountPickerRepo {
 
   FutureResult<void> addAndUpdateUser(User user);
 
+  FutureResult<void> updateAccountProfileUrl(String uid, String url);
+
   FutureResult<void> removeUser(User user);
 
   FutureResult<void> clearList();

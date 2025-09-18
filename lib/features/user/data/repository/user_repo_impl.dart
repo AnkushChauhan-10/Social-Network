@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:injectable/injectable.dart';
 import 'package:social_network/core/error/exceptions.dart';
 import 'package:social_network/core/error/failure.dart';
-import 'package:social_network/core/storage/supabase_media_data_source.dart';
 import 'package:social_network/core/utils/connectivity_extension.dart';
 import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
@@ -21,15 +18,12 @@ class UserRepoImpl extends UserRepo {
     required Connectivity connectivity,
     required UserRemoteDataSource userRemoteDataSource,
     required UserLocalDataSource userLocalDataSource,
-    required SupabaseMediaDataSource supabaseMediaDataSource,
   }) : _userRemoteDataSource = userRemoteDataSource,
        _userLocalDataSource = userLocalDataSource,
-       _supabaseMediaDataSource = supabaseMediaDataSource,
        _connectivity = connectivity;
 
   final UserRemoteDataSource _userRemoteDataSource;
   final UserLocalDataSource _userLocalDataSource;
-  final SupabaseMediaDataSource _supabaseMediaDataSource;
   final Connectivity _connectivity;
 
   @override
@@ -80,14 +74,16 @@ class UserRepoImpl extends UserRepo {
   }
 
   @override
-  FutureResult<String> updateProfilePic(String uId, File image) async {
+  FutureResult<String> updateProfilePicUrl(String uId, String url) async {
     try {
       if (!await _connectivity.isInternet) throw NetworkException();
-      var url = await _supabaseMediaDataSource.uploadMedia(
-        "$uId/profile_pic",
-        image,
+      await _userRemoteDataSource.updateUser(uId, {
+        UserModel.profilePicUrlKey: url,
+      });
+      await _userLocalDataSource.updateUserField(
+        UserModel.profilePicUrlKey,
+        url,
       );
-      await _userRemoteDataSource.updateProfilePic(uId, url);
       return Result.success(url);
     } on NetworkException catch (e) {
       return Result.failure(NetworkFailure(e.message));

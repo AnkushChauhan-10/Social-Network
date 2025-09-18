@@ -12,5 +12,5 @@ abstract class UserRepo {
 
   FutureResult<bool> clearUserCache();
 
-  FutureResult<String> updateProfilePic(String uId, File image);
+  FutureResult<String> updateProfilePicUrl(String uId,String url);
 }

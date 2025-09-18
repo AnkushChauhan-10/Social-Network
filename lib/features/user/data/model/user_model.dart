@@ -2,6 +2,12 @@ import 'package:social_network/core/utils/typedef.dart';
 import 'package:social_network/features/user/domain/entities/user.dart';
 
 class UserModel extends User {
+  static const String uIdKey = "u_id";
+  static const String nameKey = "name";
+  static const String emailKey = "email";
+  static const String profilePicUrlKey = "profile_pic_url";
+  static const String userNameKey = "user_name";
+
   const UserModel({
     required super.uId,
     required super.name,
@@ -19,11 +25,11 @@ class UserModel extends User {
   );
 
   factory UserModel.fromJson(DataMap val) => UserModel(
-    uId: val["u_id"],
-    name: val["name"],
-    email: val["email"],
-    profilePicUrl: val["profile_pic_url"],
-    userName: val['user_name'],
+    uId: val[uIdKey],
+    name: val[nameKey],
+    email: val[emailKey],
+    profilePicUrl: val[profilePicUrlKey],
+    userName: val[userNameKey],
   );
 
   UserModel copyWith({String? profilePicUrl}) => UserModel(
@@ -35,10 +41,10 @@ class UserModel extends User {
   );
 
   DataMap get toJson => {
-    "u_id": uId,
-    "user_name": userName,
-    "name": name,
-    "email": email,
-    "profile_pic_url": profilePicUrl,
+    uIdKey: uId,
+    userNameKey: userName,
+    nameKey: name,
+    emailKey: email,
+    profilePicUrlKey: profilePicUrl,
   };
 }

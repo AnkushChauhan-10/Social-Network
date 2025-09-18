@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:social_network/core/utils/typedef.dart';
+import 'package:social_network/features/user/data/model/user_model.dart';
 
 abstract class UserRemoteDataSource {
   const UserRemoteDataSource();
@@ -9,7 +10,7 @@ abstract class UserRemoteDataSource {
 
   Future<DataMap> fetchUser(String uId);
 
-  Future<void> updateProfilePic(String uId, String url);
+  Future<void> updateUser(String uId, DataMap user);
 
   Future<String> getDefaultProfilePic();
 }
@@ -33,10 +34,8 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource {
   }
 
   @override
-  Future<void> updateProfilePic(String uId, String url) async {
-    await _fireStore.collection(_collection).doc(uId).update({
-      "profile_pic_url": url,
-    });
+  Future<void> updateUser(String uId, DataMap user) async {
+    await _fireStore.collection(_collection).doc(uId).update(user);
   }
 
   @override

@@ -10,6 +10,8 @@ abstract class UserLocalDataSource {
 
   Future<void> cacheUser(DataMap val);
 
+  Future<bool> updateUserField(String key, dynamic value);
+
   Future<void> clearCacheUser();
 }
 
@@ -37,5 +39,17 @@ class UserLocalDataSourceImpl extends UserLocalDataSource {
   @override
   Future<void> clearCacheUser() async {
     await _hive.delete(_currentUserKey);
+  }
+
+  @override
+  Future<bool> updateUserField(String key, dynamic value) async {
+    final raw = await _hive.get(_currentUserKey);
+    if (raw == null) throw CacheException();
+
+    final data = Map<String, dynamic>.from(raw as Map);
+    data[key] = value;
+
+    await _hive.put(_currentUserKey, data);
+    return true;
   }
 }

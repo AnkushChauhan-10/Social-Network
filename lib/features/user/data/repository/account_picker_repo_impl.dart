@@ -67,4 +67,16 @@ class AccountPickerRepoImpl extends AccountPickerRepo {
       return Result.failure(UnknownFailure(e.toString()));
     }
   }
+
+  @override
+  FutureResult<void> updateAccountProfileUrl(String uid, String url) async {
+    try {
+      await _accountPickerLocalDataSource.updateUser(uid, {
+        UserModel.profilePicUrlKey: url,
+      });
+      return Result.success(null);
+    } catch (e) {
+      return Result.failure(UnknownFailure(e.toString()));
+    }
+  }
 }

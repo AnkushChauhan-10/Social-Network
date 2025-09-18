@@ -24,8 +24,6 @@ import 'package:social_network/core/di/flutter_secure_storage_module.dart'
     as _i616;
 import 'package:social_network/core/di/hive_module.dart' as _i745;
 import 'package:social_network/core/di/supabase_module.dart' as _i802;
-import 'package:social_network/core/storage/supabase_media_data_source.dart'
-    as _i478;
 import 'package:social_network/features/authentication/data/data_source/auth_remote_data_source.dart'
     as _i1030;
 import 'package:social_network/features/authentication/data/repository/auth_repo_impl.dart'
@@ -88,14 +86,6 @@ import 'package:social_network/features/post/presentation/feed_post/bloc/feed_po
     as _i121;
 import 'package:social_network/features/post/presentation/post/bloc/post_cubit.dart'
     as _i159;
-import 'package:social_network/features/session/data/data_source/session_local_data_source.dart'
-    as _i187;
-import 'package:social_network/features/session/data/repository/session_repo_impl.dart'
-    as _i675;
-import 'package:social_network/features/session/domain/repository/session_repo.dart'
-    as _i573;
-import 'package:social_network/features/session/domain/usecase/check_session_usecase.dart'
-    as _i214;
 import 'package:social_network/features/user/data/data_source/account_picker_local_data_source.dart'
     as _i663;
 import 'package:social_network/features/user/data/data_source/user_local_data_source.dart'
@@ -126,6 +116,20 @@ import 'package:social_network/features/user/domain/usecase/update_profile_pic_u
     as _i929;
 import 'package:social_network/features/user/presentation/profile_onboarding/bloc/profile_onboarding_cubit.dart'
     as _i278;
+import 'package:social_network/shared/media/data/data_source/media_remote_data_source.dart'
+    as _i248;
+import 'package:social_network/shared/media/data/repo/media_repo_impl.dart'
+    as _i859;
+import 'package:social_network/shared/media/domain/repo/media_repo.dart'
+    as _i629;
+import 'package:social_network/shared/session/data/data_source/session_local_data_source.dart'
+    as _i790;
+import 'package:social_network/shared/session/data/repository/session_repo_impl.dart'
+    as _i1000;
+import 'package:social_network/shared/session/domain/repository/session_repo.dart'
+    as _i198;
+import 'package:social_network/shared/session/domain/usecase/check_session_usecase.dart'
+    as _i951;
 import 'package:supabase_flutter/supabase_flutter.dart' as _i454;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -186,6 +190,11 @@ extension GetItInjectableX on _i174.GetIt {
         fireStore: gh<_i974.FirebaseFirestore>(),
       ),
     );
+    gh.lazySingleton<_i790.SessionLocalDataSource>(
+      () => _i790.SessionLocalDataSourceImpl(
+        secureStorage: gh<_i558.FlutterSecureStorage>(),
+      ),
+    );
     gh.factory<_i736.UserQueryRepo>(
       () => _i1012.UserQueryRepoImpl(
         connectivity: gh<_i895.Connectivity>(),
@@ -207,20 +216,14 @@ extension GetItInjectableX on _i174.GetIt {
         box: gh<_i979.Box<dynamic>>(instanceName: 'account_list_box'),
       ),
     );
-    gh.lazySingleton<_i478.SupabaseMediaDataSource>(
-      () => _i478.SupabaseMediaDataSourceImpl(
-        supabaseClient: gh<_i454.SupabaseClient>(),
-      ),
-    );
-    gh.lazySingleton<_i187.SessionLocalDataSource>(
-      () => _i187.SessionLocalDataSourceImpl(
-        secureStorage: gh<_i558.FlutterSecureStorage>(),
-      ),
-    );
     gh.lazySingleton<_i818.PostCreationRepo>(
       () => _i549.PostCreationRepoImpl(
         postCreationRemoteDataSource: gh<_i247.PostCreationRemoteDataSource>(),
-        supabaseMediaDataSource: gh<_i478.SupabaseMediaDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i248.MediaRemoteDataSource>(
+      () => _i248.MediaRemoteDataSourceImpl(
+        supabaseClient: gh<_i454.SupabaseClient>(),
       ),
     );
     gh.lazySingleton<_i372.PostQueryRepo>(
@@ -234,10 +237,23 @@ extension GetItInjectableX on _i174.GetIt {
         accountPickerLocalDataSource: gh<_i663.AccountPickerLocalDataSource>(),
       ),
     );
+    gh.lazySingleton<_i33.UserRepo>(
+      () => _i478.UserRepoImpl(
+        connectivity: gh<_i895.Connectivity>(),
+        userRemoteDataSource: gh<_i457.UserRemoteDataSource>(),
+        userLocalDataSource: gh<_i240.UserLocalDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i190.PostActionRepo>(
       () => _i112.PostActionRepoImpl(
         connectivity: gh<_i895.Connectivity>(),
         postActionRemoteDataSource: gh<_i1033.PostActionRemoteDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i629.MediaRepo>(
+      () => _i859.MediaRepoImpl(
+        mediaRemoteDataSource: gh<_i248.MediaRemoteDataSource>(),
+        connectivity: gh<_i895.Connectivity>(),
       ),
     );
     gh.lazySingleton<_i228.AuthRepo>(
@@ -246,29 +262,23 @@ extension GetItInjectableX on _i174.GetIt {
         connectivity: gh<_i895.Connectivity>(),
       ),
     );
-    gh.lazySingleton<_i33.UserRepo>(
-      () => _i478.UserRepoImpl(
-        connectivity: gh<_i895.Connectivity>(),
-        userRemoteDataSource: gh<_i457.UserRemoteDataSource>(),
-        userLocalDataSource: gh<_i240.UserLocalDataSource>(),
-        supabaseMediaDataSource: gh<_i478.SupabaseMediaDataSource>(),
+    gh.lazySingleton<_i198.SessionRepo>(
+      () => _i1000.SessionRepoImpl(
+        sessionLocalDataSource: gh<_i790.SessionLocalDataSource>(),
       ),
     );
-    gh.lazySingleton<_i573.SessionRepo>(
-      () => _i675.SessionRepoImpl(
-        sessionLocalDataSource: gh<_i187.SessionLocalDataSource>(),
+    gh.factory<_i706.LogOutUseCase>(
+      () => _i706.LogOutUseCase(
+        authRepo: gh<_i228.AuthRepo>(),
+        userRepo: gh<_i33.UserRepo>(),
+        sessionRepo: gh<_i198.SessionRepo>(),
       ),
     );
-    gh.factory<_i679.DislikePostUseCase>(
-      () => _i679.DislikePostUseCase(
-        postActionRepo: gh<_i190.PostActionRepo>(),
-        sessionRepo: gh<_i573.SessionRepo>(),
-      ),
-    );
-    gh.factory<_i243.LikePostUseCase>(
-      () => _i243.LikePostUseCase(
-        postActionRepo: gh<_i190.PostActionRepo>(),
-        sessionRepo: gh<_i573.SessionRepo>(),
+    gh.factory<_i522.CreatePostUseCase>(
+      () => _i522.CreatePostUseCase(
+        postCreationRepo: gh<_i818.PostCreationRepo>(),
+        sessionRepo: gh<_i198.SessionRepo>(),
+        mediaRepo: gh<_i629.MediaRepo>(),
       ),
     );
     gh.factory<_i650.GetAccountsUseCase>(
@@ -281,87 +291,78 @@ extension GetItInjectableX on _i174.GetIt {
         accountPickerRepo: gh<_i17.AccountPickerRepo>(),
       ),
     );
-    gh.factory<_i115.SignUpUseCase>(
-      () => _i115.SignUpUseCase(
-        sessionRepo: gh<_i573.SessionRepo>(),
-        authRepo: gh<_i228.AuthRepo>(),
-        userRepo: gh<_i33.UserRepo>(),
-      ),
-    );
     gh.factory<_i252.GetUserUseCase>(
       () => _i252.GetUserUseCase(
         userRepo: gh<_i33.UserRepo>(),
         accountPickerRepo: gh<_i17.AccountPickerRepo>(),
-        sessionRepo: gh<_i573.SessionRepo>(),
+        sessionRepo: gh<_i198.SessionRepo>(),
+      ),
+    );
+    gh.factory<_i905.LogInUseCase>(
+      () => _i905.LogInUseCase(
+        authRepo: gh<_i228.AuthRepo>(),
+        sessionRepo: gh<_i198.SessionRepo>(),
+      ),
+    );
+    gh.factory<_i765.LoginUserIdUseCase>(
+      () => _i765.LoginUserIdUseCase(sessionRepo: gh<_i198.SessionRepo>()),
+    );
+    gh.factory<_i951.CheckSessionUseCase>(
+      () => _i951.CheckSessionUseCase(sessionRepo: gh<_i198.SessionRepo>()),
+    );
+    gh.factory<_i234.GetPostDetailsUseCase>(
+      () => _i234.GetPostDetailsUseCase(
+        postQueryRepo: gh<_i372.PostQueryRepo>(),
+        sessionRepo: gh<_i198.SessionRepo>(),
+        userQueryRepo: gh<_i736.UserQueryRepo>(),
       ),
     );
     gh.factory<_i929.UpdateProfilePicUseCase>(
       () => _i929.UpdateProfilePicUseCase(
         userRepo: gh<_i33.UserRepo>(),
-        sessionRepo: gh<_i573.SessionRepo>(),
+        mediaRepo: gh<_i629.MediaRepo>(),
+        accountPickerRepo: gh<_i17.AccountPickerRepo>(),
+        sessionRepo: gh<_i198.SessionRepo>(),
       ),
     );
-    gh.factory<_i834.SignUpCubit>(
-      () => _i834.SignUpCubit(signUpUseCase: gh<_i115.SignUpUseCase>()),
-    );
-    gh.factory<_i765.LoginUserIdUseCase>(
-      () => _i765.LoginUserIdUseCase(sessionRepo: gh<_i573.SessionRepo>()),
-    );
-    gh.factory<_i214.CheckSessionUseCase>(
-      () => _i214.CheckSessionUseCase(sessionRepo: gh<_i573.SessionRepo>()),
-    );
-    gh.factory<_i905.LogInUseCase>(
-      () => _i905.LogInUseCase(
-        authRepo: gh<_i228.AuthRepo>(),
-        sessionRepo: gh<_i573.SessionRepo>(),
+    gh.factory<_i679.DislikePostUseCase>(
+      () => _i679.DislikePostUseCase(
+        postActionRepo: gh<_i190.PostActionRepo>(),
+        sessionRepo: gh<_i198.SessionRepo>(),
       ),
     );
-    gh.factoryParam<_i90.AccountPickerCubit, List<_i531.User>, dynamic>(
-      (user, _) => _i90.AccountPickerCubit(
-        user,
-        removeUserUseCase: gh<_i624.RemoveUserUseCase>(),
-        loginWithUserId: gh<_i765.LoginUserIdUseCase>(),
+    gh.factory<_i243.LikePostUseCase>(
+      () => _i243.LikePostUseCase(
+        postActionRepo: gh<_i190.PostActionRepo>(),
+        sessionRepo: gh<_i198.SessionRepo>(),
       ),
     );
-    gh.factory<_i706.LogOutUseCase>(
-      () => _i706.LogOutUseCase(
+    gh.factory<_i115.SignUpUseCase>(
+      () => _i115.SignUpUseCase(
+        sessionRepo: gh<_i198.SessionRepo>(),
         authRepo: gh<_i228.AuthRepo>(),
         userRepo: gh<_i33.UserRepo>(),
-        sessionRepo: gh<_i573.SessionRepo>(),
       ),
     );
     gh.factory<_i1018.LogInCubit>(
       () => _i1018.LogInCubit(logInUseCase: gh<_i905.LogInUseCase>()),
     );
-    gh.factory<_i522.CreatePostUseCase>(
-      () => _i522.CreatePostUseCase(
-        postCreationRepo: gh<_i818.PostCreationRepo>(),
-        sessionRepo: gh<_i573.SessionRepo>(),
-      ),
-    );
-    gh.factory<_i810.AuthCubit>(
-      () => _i810.AuthCubit(
-        checkSessionUseCase: gh<_i214.CheckSessionUseCase>(),
-        getAccountUseCase: gh<_i650.GetAccountsUseCase>(),
-        getUserUseCase: gh<_i252.GetUserUseCase>(),
-      ),
-    );
     gh.factory<_i94.GetFeedPostUseCase>(
       () => _i94.GetFeedPostUseCase(
         postCollectionRepo: gh<_i667.PostCollectionRepo>(),
-        sessionRepo: gh<_i573.SessionRepo>(),
+        sessionRepo: gh<_i198.SessionRepo>(),
+      ),
+    );
+    gh.factory<_i159.PostCubit>(
+      () => _i159.PostCubit(
+        postDetailsUseCase: gh<_i234.GetPostDetailsUseCase>(),
+        likePostUseCase: gh<_i243.LikePostUseCase>(),
+        dislikePostUseCase: gh<_i679.DislikePostUseCase>(),
       ),
     );
     gh.factory<_i951.CreatePostCubit>(
       () => _i951.CreatePostCubit(
         createPostUseCase: gh<_i522.CreatePostUseCase>(),
-      ),
-    );
-    gh.factory<_i234.GetPostDetailsUseCase>(
-      () => _i234.GetPostDetailsUseCase(
-        postQueryRepo: gh<_i372.PostQueryRepo>(),
-        sessionRepo: gh<_i573.SessionRepo>(),
-        userQueryRepo: gh<_i736.UserQueryRepo>(),
       ),
     );
     gh.factory<_i278.ProfileOnBoardingCubit>(
@@ -370,16 +371,26 @@ extension GetItInjectableX on _i174.GetIt {
         getUserUseCase: gh<_i252.GetUserUseCase>(),
       ),
     );
+    gh.factory<_i810.AuthCubit>(
+      () => _i810.AuthCubit(
+        checkSessionUseCase: gh<_i951.CheckSessionUseCase>(),
+        getAccountUseCase: gh<_i650.GetAccountsUseCase>(),
+        getUserUseCase: gh<_i252.GetUserUseCase>(),
+      ),
+    );
+    gh.factory<_i834.SignUpCubit>(
+      () => _i834.SignUpCubit(signUpUseCase: gh<_i115.SignUpUseCase>()),
+    );
     gh.factory<_i121.FeedPostCubit>(
       () => _i121.FeedPostCubit(
         getFeedPostUseCase: gh<_i94.GetFeedPostUseCase>(),
       ),
     );
-    gh.factory<_i159.PostCubit>(
-      () => _i159.PostCubit(
-        postDetailsUseCase: gh<_i234.GetPostDetailsUseCase>(),
-        likePostUseCase: gh<_i243.LikePostUseCase>(),
-        dislikePostUseCase: gh<_i679.DislikePostUseCase>(),
+    gh.factoryParam<_i90.AccountPickerCubit, List<_i531.User>, dynamic>(
+      (user, _) => _i90.AccountPickerCubit(
+        user,
+        removeUserUseCase: gh<_i624.RemoveUserUseCase>(),
+        loginWithUserId: gh<_i765.LoginUserIdUseCase>(),
       ),
     );
     return this;

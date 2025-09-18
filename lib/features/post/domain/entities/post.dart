@@ -20,14 +20,16 @@ class Post extends Equatable {
   final int commentCount;
 
   factory Post.create({
+    required String id,
     required String userId,
     required String content,
     required DateTime createdAt,
+    required String mediaUrl,
   }) => Post(
-    id: "",
+    id: id,
     userId: userId,
     content: content,
-    mediaUrl: "",
+    mediaUrl: mediaUrl,
     createdAt: createdAt,
     likesCount: 0,
     commentCount: 0,
