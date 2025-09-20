@@ -9,9 +9,13 @@ class LogoText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(switch (Theme.of(context).brightness) {
-      Brightness.dark => Assets.darkLogoTextSvg,
-      Brightness.light => Assets.lightLogoTextSvg,
-    });
+    return SvgPicture.asset(
+      switch (Theme.of(context).brightness) {
+        Brightness.dark => Assets.darkLogoTextSvg,
+        Brightness.light => Assets.lightLogoTextSvg,
+      },
+      height: _size.height,
+      width: _size.width,
+    );
   }
 }

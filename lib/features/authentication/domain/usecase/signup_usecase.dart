@@ -3,6 +3,7 @@ import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
 import 'package:social_network/core/utils/use_case.dart';
 import 'package:social_network/features/authentication/domain/repository/auth_repo.dart';
+import 'package:social_network/features/user/domain/entities/create_user.dart';
 import 'package:social_network/features/user/domain/entities/user.dart';
 import 'package:social_network/features/user/domain/repository/user_repo.dart';
 import 'package:social_network/shared/session/domain/repository/session_repo.dart';
@@ -25,16 +26,15 @@ class SignUpUseCase extends UseCaseWithParam<FutureResult<User>, SignUpParam> {
   FutureResult<User> call(SignUpParam param) async {
     var signUp = await _authRepo.signup(param.email, param.password);
     var result = await signUp.fold<FutureResult<User>>((uId) async {
-      User user = User(
-        uId: uId,
+      CreateUser createUser = CreateUser(
+        id: uId,
         name: param.name,
         email: param.email,
-        profilePicUrl: "",
         userName: param.userName,
       );
-      var createUser = await _userRepo.createUser(user);
-      return await createUser.fold<FutureResult<User>>(
-        (i) async => Result.success(user),
+      var userCreated = await _userRepo.createUser(createUser);
+      return await userCreated.fold<FutureResult<User>>(
+        (i) async => Result.success(i),
         (error) async => Result.failure(error),
       );
     }, (error) async => Result.failure(error));

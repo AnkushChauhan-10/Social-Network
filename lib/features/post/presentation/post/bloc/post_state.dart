@@ -20,11 +20,12 @@ final class PostLoading extends PostState {
 }
 
 final class PostSuccess extends PostState {
-  const PostSuccess(this.postDetail, this.isLike, this.isSave);
+  const PostSuccess(this.postDetail, this.isLike, this.isSave, this.likeCount);
 
   final PostDetail postDetail;
   final bool isLike;
   final bool isSave;
+  final int likeCount;
 
   @override
   List<Object?> get props => [

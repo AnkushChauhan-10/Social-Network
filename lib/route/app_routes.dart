@@ -1,18 +1,3 @@
-// abstract class AppRoutes {
-//   const AppRoutes._();
-//
-//   static String splash = "/splash";
-//   static String signUp = "/signUp";
-//   static String logIn = "/logIn";
-//
-//   static final String _main = "/main";
-//   static String home = "$_main/home";
-//
-//   static String createPost = "/createPost";
-//   static String editCreatePost = "$createPost/edit";
-//   static String uploadCreatePost = "$createPost/upload";
-// }
-
 enum AppRoutes {
   splash._(_AppRoutes.splash),
 
@@ -27,9 +12,10 @@ enum AppRoutes {
 
   ///
   home._(_AppRoutes.home),
-  createPost._(_AppRoutes.createPost)
-  // editPost._(_AppRoutes.editCreatePost),
-  // uploadPost._(_AppRoutes.uploadCreatePost)
+  search._(_AppRoutes.search),
+  createPost._(_AppRoutes.createPost),
+  notification._(_AppRoutes.notification),
+  profile._(_AppRoutes.profile)
   ///
   ;
 
@@ -52,12 +38,15 @@ class _AppRoutes {
 
   static const profileOnBoarding = _Route("profileOnBoarding");
 
-  static const main = _Route("/main");
   static const home = _Route("home");
 
+  static const search = _Route("search");
+
+  static const notification = _Route("notification");
+
+  static const profile = _Route("profile");
+
   static const createPost = _Route("createPost");
-  // static const editCreatePost = _Route("edit", parent: createPost);
-  // static const uploadCreatePost = _Route("update", parent: createPost);
 }
 
 class _Route {

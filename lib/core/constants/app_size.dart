@@ -1,5 +1,4 @@
 class AppSizes {
-
   static const double xs = 4.0;
   static const double sm = 8.0;
   static const double md = 16.0;
@@ -23,4 +22,10 @@ class AppFontSizes {
   static const double xl = 20.0;
   static const double xxl = 24.0;
   static const double xxxl = 32.0;
+}
+
+class AppIconSize {
+  static const double small = 24;
+  static const double medium = 28;
+  static const double large = 32;
 }

@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:social_network/core/error/failure.dart';
 import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
-import 'package:social_network/features/user/data/data_source/account_picker_local_data_source.dart';
+import 'package:social_network/features/user/data/data_source/local/account_picker_local_data_source.dart';
 import 'package:social_network/features/user/data/model/user_model.dart';
 import 'package:social_network/features/user/domain/entities/user.dart';
 import 'package:social_network/features/user/domain/repository/account_picker_repo.dart';

@@ -5,7 +5,7 @@ import 'package:social_network/core/utils/typedef.dart';
 abstract class PostCollectionRemoteDataSource {
   const PostCollectionRemoteDataSource();
 
-  Future<List<DataMap>> getFeedPost(String uId);
+  Future<List<DataMap>> getFeedPost();
 }
 
 @LazySingleton(as: PostCollectionRemoteDataSource)
@@ -16,10 +16,13 @@ class PostCollectionRemoteDataSourceImpl
   const PostCollectionRemoteDataSourceImpl({
     required FirebaseFirestore fireStore,
   }) : _fireStore = fireStore;
+  final String _collection = "posts";
 
   @override
-  Future<List<DataMap>> getFeedPost(String uId) async {
-    // TODO: implement getFeedPost
-    throw UnimplementedError();
+  Future<List<DataMap>> getFeedPost() async {
+    var posts = await _fireStore.collection(_collection).limit(10).get();
+    return posts.docChanges
+        .map<DataMap>((val) => val.doc.data() as DataMap)
+        .toList();
   }
 }

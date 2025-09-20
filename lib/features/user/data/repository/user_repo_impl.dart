@@ -6,9 +6,10 @@ import 'package:social_network/core/error/failure.dart';
 import 'package:social_network/core/utils/connectivity_extension.dart';
 import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
-import 'package:social_network/features/user/data/data_source/user_local_data_source.dart';
-import 'package:social_network/features/user/data/data_source/user_remote_data_source.dart';
+import 'package:social_network/features/user/data/data_source/local/user_local_data_source.dart';
+import 'package:social_network/features/user/data/data_source/remote/user_remote_data_source.dart';
 import 'package:social_network/features/user/data/model/user_model.dart';
+import 'package:social_network/features/user/domain/entities/create_user.dart';
 import 'package:social_network/features/user/domain/entities/user.dart';
 import 'package:social_network/features/user/domain/repository/user_repo.dart';
 
@@ -27,15 +28,13 @@ class UserRepoImpl extends UserRepo {
   final Connectivity _connectivity;
 
   @override
-  FutureResult<bool> createUser(User user) async {
+  FutureResult<User> createUser(CreateUser createUser) async {
     if (!await _connectivity.isInternet) throw NetworkException("No Internet");
     var defaultProfile = await _userRemoteDataSource.getDefaultProfilePic();
-    var userModel = UserModel.fromEntity(
-      user,
-    ).copyWith(profilePicUrl: defaultProfile);
+    var userModel = UserModel.createUser(createUser, defaultProfile);
     try {
-      await _userRemoteDataSource.createUser(user.uId, userModel.toJson);
-      return Result.success(true);
+      await _userRemoteDataSource.createUser(userModel.uId, userModel.toJson);
+      return Result.success(userModel);
     } on NetworkException catch (e) {
       return Result.failure(NetworkFailure(e.message));
     } on FirebaseFirestore catch (e) {
@@ -93,4 +92,15 @@ class UserRepoImpl extends UserRepo {
       return Result.failure(UnknownFailure());
     }
   }
+
+  @override
+  Future<void> registerUserPost({
+    required String userId,
+    required String postId,
+    required Transaction tx,
+  }) async => await _userRemoteDataSource.registerUserPost(
+    userId: userId,
+    postId: postId,
+    tx: tx,
+  );
 }

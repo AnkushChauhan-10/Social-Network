@@ -5,7 +5,7 @@ import 'package:social_network/core/error/failure.dart';
 import 'package:social_network/core/utils/connectivity_extension.dart';
 import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
-import 'package:social_network/features/user/data/data_source/user_remote_data_source.dart';
+import 'package:social_network/features/user/data/data_source/remote/user_remote_data_source.dart';
 import 'package:social_network/features/user/data/model/user_model.dart';
 import 'package:social_network/features/user/domain/entities/user.dart';
 import 'package:social_network/features/user/domain/repository/user_query_repo.dart';
@@ -28,6 +28,19 @@ class UserQueryRepoImpl extends UserQueryRepo {
       var data = await _userRemoteDataSource.fetchUser(userId);
       var userModel = UserModel.fromJson(data);
       return Result.success(userModel);
+    } on CacheException catch (e) {
+      return Result.failure(CacheFailure(e.message));
+    } catch (e) {
+      return Result.failure(UnknownFailure());
+    }
+  }
+
+  @override
+  FutureResult<List<String>> getUserPosts(String userId) async {
+    try {
+      if (!await _connectivity.isInternet) throw NetworkException();
+      var data = await _userRemoteDataSource.getPosts(userId);
+      return Result.success(data);
     } on CacheException catch (e) {
       return Result.failure(CacheFailure(e.message));
     } catch (e) {

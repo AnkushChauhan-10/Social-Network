@@ -6,7 +6,7 @@ import 'package:social_network/core/error/failure.dart';
 import 'package:social_network/core/utils/connectivity_extension.dart';
 import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
-import 'package:social_network/features/post/data/data_source/post_query_remote_data_source.dart';
+import 'package:social_network/features/post/data/data_source/remote/post_query_remote_data_source.dart';
 import 'package:social_network/features/post/data/models/post_model.dart';
 import 'package:social_network/features/post/domain/entities/post.dart';
 import 'package:social_network/features/post/domain/repository/post_query_repo.dart';

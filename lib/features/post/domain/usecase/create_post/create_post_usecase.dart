@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:social_network/core/utils/result.dart';
 import 'package:social_network/core/utils/typedef.dart';
 import 'package:social_network/core/utils/use_case.dart';
 import 'package:social_network/features/post/domain/entities/post.dart';
 import 'package:social_network/features/post/domain/repository/post_creation_repo.dart';
+import 'package:social_network/features/user/domain/repository/user_repo.dart';
 import 'package:social_network/shared/media/domain/repo/media_repo.dart';
 import 'package:social_network/shared/session/domain/repository/session_repo.dart';
 
@@ -16,11 +18,14 @@ class CreatePostUseCase
     required PostCreationRepo postCreationRepo,
     required SessionRepo sessionRepo,
     required MediaRepo mediaRepo,
+    required UserRepo userRepo,
   }) : _postCreationRepo = postCreationRepo,
        _sessionRepo = sessionRepo,
+       _userRepo = userRepo,
        _mediaRepo = mediaRepo;
 
   final PostCreationRepo _postCreationRepo;
+  final UserRepo _userRepo;
   final MediaRepo _mediaRepo;
   final SessionRepo _sessionRepo;
 
@@ -46,7 +51,16 @@ class CreatePostUseCase
           mediaUrl: url,
           createdAt: timeStamp,
         );
-        return await _postCreationRepo.createPost(post);
+        return await _postCreationRepo.createPost(
+          post,
+          transactionCallback: (tx) async {
+            await _userRepo.registerUserPost(
+              userId: userId,
+              postId: postId,
+              tx: tx,
+            );
+          },
+        );
       }, (f) async => Result.failure(f));
     }, (f) async => Result.failure(f));
   }

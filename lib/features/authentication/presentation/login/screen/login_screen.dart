@@ -53,13 +53,11 @@ class _LogInScreenState extends State<LogInScreen> {
 
   void _listener(BuildContext context, LogInState state) {
     if (state is LogInSuccessState) AppRouter.go(AppRoutes.auth);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (state is LogInLoadingState) {
-        TransparentLoadingDialog.show(context);
-      } else {
-        TransparentLoadingDialog.hide(context);
-      }
-    });
+    if (state is LogInLoadingState) {
+      TransparentLoadingDialog.show(context);
+    } else {
+      TransparentLoadingDialog.hide(context);
+    }
   }
 
   void _submit() async {

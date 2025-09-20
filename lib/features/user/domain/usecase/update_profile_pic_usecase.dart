@@ -33,10 +33,13 @@ class UpdateProfilePicUseCase
     if (!session.isSuccess) return session;
     var uId = (session as Success<String>).data;
     var urlResult = await _mediaRepo.uploadMedia("$uId/profile_pic", param);
-    var updateUrlResult =  await urlResult.fold(
-      (url) async => await _userRepo.updateProfilePicUrl(uId, url),
-      (f) async => Result.failure(f),
-    );
+    var updateUrlResult = await urlResult.fold<FutureResult<void>>((url) async {
+      var result = await _userRepo.updateProfilePicUrl(uId, url);
+      if (result.isSuccess) {
+        await _accountPickerRepo.updateAccountProfileUrl(uId, url);
+      }
+      return result;
+    }, (f) async => Result.failure(f));
     return updateUrlResult;
   }
 }

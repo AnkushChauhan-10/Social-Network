@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_network/core/constants/app_size.dart';
 import 'package:social_network/core/di/injection.dart';
 import 'package:social_network/features/post/presentation/feed_post/bloc/feed_post_cubit.dart';
 import 'package:social_network/features/post/presentation/feed_post/bloc/feed_post_state.dart';
@@ -14,10 +15,18 @@ class FeedList extends StatelessWidget {
       bloc: getIt<FeedPostCubit>()..loadFeed(),
       builder: (BuildContext context, FeedPostState state) {
         return ListView.separated(
-          itemBuilder: (context, index) =>
-              PostTile(id: state.postIdList.elementAt(index)),
-          separatorBuilder: (context, index) => Divider(),
-          itemCount: state.postIdList.length,
+          itemBuilder: (context, index) {
+            if (index < state.postList.length) {
+              return PostTile(postCubit: state.postList.elementAt(index));
+            } else {
+              return const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+          },
+          separatorBuilder: (context, index) => SizedBox(height:AppSizes.xs),
+          itemCount: state.postList.length+1,
         );
       },
     );
